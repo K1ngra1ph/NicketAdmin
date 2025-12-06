@@ -1,4 +1,4 @@
-import "../globals.css";
+import "./global.css";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 

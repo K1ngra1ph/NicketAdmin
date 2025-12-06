@@ -1,6 +1,7 @@
-const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
+import axios from "axios";
 
-export const fetchData = async (resource) => {
-  const res = await fetch(`${backend}/api/${resource}`);
-  return res.json();
-};
+const API = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+export const api = axios.create({
+  baseURL: API,
+});

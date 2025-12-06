@@ -1,23 +1,36 @@
 export default function Table({ columns, data }) {
   return (
-    <table className="w-full text-left border-collapse">
-      <thead className="neon text-sm border-b border-red-900">
-        <tr>
-          {columns.map((col) => (
-            <th key={col} className="py-2">{col}</th>
-          ))}
-        </tr>
-      </thead>
-
-      <tbody>
-        {data.map((row, i) => (
-          <tr key={i} className="border-b border-gray-800 hover:bg-red-950">
+    <div className="overflow-x-auto rounded-xl border border-gray-700 bg-[#121212]">
+      <table className="w-full text-sm text-gray-300">
+        <thead className="bg-[#1e1e1e] text-gray-200">
+          <tr>
             {columns.map((col) => (
-              <td key={col} className="py-2">{row[col]}</td>
+              <th key={col.accessor} className="px-4 py-3 text-left font-medium">
+                {col.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {data.length === 0 && (
+            <tr>
+              <td className="px-4 py-6 text-center" colSpan={columns.length}>
+                No data found
+              </td>
+            </tr>
+          )}
+          {data.map((row, i) => (
+            <tr key={i} className="border-t border-gray-700 hover:bg-[#1b1b1b]">
+              {columns.map((col) => (
+                <td key={col.accessor} className="px-4 py-3">
+                  {row[col.accessor] ?? "-"}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

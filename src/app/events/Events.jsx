@@ -1,51 +1,39 @@
-import React, { useEffect, useState } from "react";
-import api from "../../api";
+"use client";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import Table from "@/components/Table";
+import Pagination from "@/components/Pagination";
+import SearchBar from "@/components/SearchBar";
 
-export default function Events() {
-  const [rows, setRows] = useState([]);
-  const [page, setPage] = useState(0);
+export default function EventsPage() {
+  const [events, setEvents] = useState([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+
+  const fetchEvents = async () => {
+    const res = await api.get(`/events?search=${search}&page=${page}`);
+    setEvents(res.data.data || []);
+  };
 
   useEffect(() => {
-    load();
-  }, [page]);
+    fetchEvents();
+  }, [search, page]);
 
-  async function load() {
-    try {
-      const perPage = 20;
-      const start = page * perPage;
-      const end = start + perPage;
-      const res = await api.get(`/events?_start=${start}&_end=${end}`);
-      setRows(res.data || []);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const columns = [
+    { label: "Event Name", accessor: "name" },
+    { label: "Status", accessor: "status" },
+    { label: "Created", accessor: "createdAt" },
+  ];
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold neon mb-4">Events</h2>
-      <div className="card p-4 rounded-lg">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="text-muted text-sm">
-              <th className="py-2">Name</th>
-              <th>Date</th>
-              <th>Location</th>
-              <th>Active</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(r => (
-              <tr key={r._id} className="border-t border-black/10">
-                <td className="py-3">{r.name}</td>
-                <td>{r.date}</td>
-                <td>{r.location}</td>
-                <td>{r.active ? "Yes" : "No"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-semibold">Events</h1>
+        <SearchBar value={search} onChange={setSearch} />
       </div>
+
+      <Table columns={columns} data={events} />
+      <Pagination page={page} totalPages={10} onPageChange={setPage} />
     </div>
   );
 }
