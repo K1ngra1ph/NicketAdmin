@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon: #ff0033;
+  --dark-bg: #0a0a0b;
+  --dark-card: #111114;
+}
+
+body {
+  background: var(--dark-bg);
+  font-family: 'Poppins', sans-serif;
+}
+
+.neon {
+  color: var(--neon);
+}
+
+.card {
+  background: var(--dark-card);
+  border: 1px solid rgba(255, 0, 50, 0.2);
+  border-radius: 10px;
+}
